@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import trendingCarsData from '../data/trendingCarsData'; 
 
 const TrendingScreen = () => {
   const [trendingCars, setTrendingCars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchTrendingCars = async () => {
+    const fetchTrendingCars = () => {
       try {
-        const response = await fetch('https://api.api-ninjas.com/v1/cars?limit=5', {
-          headers: { 'X-Api-Key': 'tED9kAmK8i21p8T0iac5Eg==xRwH2ESuSnewxivc' },
-        });
-        const data = await response.json();
-        setTrendingCars(data);
+        console.log('Fetching data...');  
+        setTrendingCars(trendingCarsData);
+        console.log('Fetched data:', trendingCarsData);  
       } catch (error) {
         console.error('Error fetching car data:', error);
       } finally {
         setIsLoading(false);
+        console.log('Data fetching completed'); 
       }
     };
 
@@ -31,6 +31,7 @@ const TrendingScreen = () => {
     );
   }
 
+  console.log('Trending cars data:', trendingCars);  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Trending Models</Text>
@@ -38,14 +39,11 @@ const TrendingScreen = () => {
         data={trendingCars}
         renderItem={({ item }) => (
           <View style={styles.carContainer}>
-            {/* Display car image */}
-            <Image source={{ uri: item.image_url }} style={styles.image} />
+            <Image source={{ uri: item.imageUrl }} style={styles.image} />
             <View style={styles.textContainer}>
-              {/* Display car details */}
               <Text style={styles.modelText}>{item.model}</Text>
-              <Text style={styles.makeText}>Make: {item.make}</Text>
-              <Text style={styles.specText}>Power: {item.power}</Text>
-              <Text style={styles.specText}>Price: {item.price}</Text>
+              <Text style={styles.makeText}>Manufacturer: {item.manufacturer}</Text>
+              <Text style={styles.specText}>Price: ${item.price}</Text>
             </View>
           </View>
         )}

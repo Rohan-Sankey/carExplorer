@@ -59,7 +59,7 @@ const UserProfileScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Profile Image */}
+     
       <View style={styles.imageContainer}>
         <Image
           source={require('../assets/icons/alien.png')}
@@ -67,19 +67,19 @@ const UserProfileScreen = () => {
         />
       </View>
 
-      {/* Username */}
-      <Text style={styles.username}>{userData.name || 'Username'}</Text>
+     
+      <Text style={styles.username}>{userData.username || 'Username'}</Text>
 
-      {/* Email Section */}
+      
       <View style={styles.emailContainer}>
         <Image
-          source={require('../assets/icons/email.png')} // Local image for email icon
+          source={require('../assets/icons/email.png')} 
           style={styles.emailIcon}
         />
         <Text style={styles.email}>{userData.email || 'abc@gmail.com'}</Text>
       </View>
 
-      {/* Logout Button */}
+      
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
 
-  // Username
+ 
   username: {
     fontSize: 22,
     fontWeight: 'bold',

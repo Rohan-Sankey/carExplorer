@@ -82,7 +82,7 @@ const CarModelsScreen = () => {
                 </View>
               </View>
 
-              {/* 🔹 Toggle between star and favorite icon with color change */}
+              
               <TouchableOpacity
                 style={styles.favoriteIcon}
                 onPress={() => handleFavoriteToggle(item)}
@@ -90,7 +90,7 @@ const CarModelsScreen = () => {
                 <Image 
                   source={starIcon} 
                   style={[styles.icon, { tintColor: getStarIconColor(item) }]} 
-                  key={isFavorite ? 'fav' : 'not-fav'}  // 🔥 Forces re-render
+                  key={isFavorite ? 'fav' : 'not-fav'}  
                 />
               </TouchableOpacity>
             </TouchableOpacity>

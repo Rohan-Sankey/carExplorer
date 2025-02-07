@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { 
+  View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ImageBackground 
+} from 'react-native';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/authSlice';
@@ -7,7 +9,7 @@ import { setUser } from '../redux/authSlice';
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const dispatch = useDispatch(); // ✅ Use Redux dispatch
+  const dispatch = useDispatch(); 
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -25,7 +27,7 @@ const LoginScreen = ({ navigation }) => {
       }
 
       Alert.alert('Success', 'Login successful!');
-      dispatch(setUser(user)); // ✅ Store user in Redux
+      dispatch(setUser(user)); 
     } catch (error) {
       Alert.alert('Error', 'Login failed!');
       console.error(error);
@@ -33,28 +35,101 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} keyboardType="email-address" />
-      <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
-        <Text style={styles.footerText}>Don't have an account? <Text style={styles.footerLink}>Sign Up</Text></Text>
-      </TouchableOpacity>
-    </View>
+    <ImageBackground 
+      source={require('../assets/images/homeBackground.jpg')} 
+      style={styles.background}
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.title}>Login</Text>
+
+        <TextInput 
+          style={styles.input} 
+          placeholder="Email" 
+          placeholderTextColor="#ddd"
+          value={email} 
+          onChangeText={setEmail} 
+          keyboardType="email-address" 
+        />
+
+        <TextInput 
+          style={styles.input} 
+          placeholder="Password" 
+          placeholderTextColor="#ddd"
+          value={password} 
+          onChangeText={setPassword} 
+          secureTextEntry 
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
+          <Text style={styles.footerText}>
+            Don't have an account? <Text style={styles.footerLink}>Sign Up</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: '#f5f5f5' },
-  title: { fontSize: 32, fontWeight: 'bold', marginBottom: 30, color: '#333' },
-  input: { width: '100%', height: 50, borderColor: '#ccc', borderWidth: 1, borderRadius: 10, marginBottom: 15, paddingHorizontal: 15, backgroundColor: '#fff', fontSize: 16 },
-  button: { width: '100%', height: 50, backgroundColor: '#4CAF50', borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 20 },
-  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-  footerText: { fontSize: 14, marginTop: 20, color: '#333' },
-  footerLink: { color: '#4CAF50', fontWeight: 'bold' },
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overlay: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',  
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 30,
+    color: '#fff',
+  },
+  input: {
+    width: '100%',
+    height: 50,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',  
+    fontSize: 16,
+    color: '#fff',
+  },
+  button: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#4CAF50',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  footerText: {
+    fontSize: 14,
+    marginTop: 20,
+    color: '#ddd',
+  },
+  footerLink: {
+    color: '#4CAF50',
+    fontWeight: 'bold',
+  },
 });
 
 export default LoginScreen;

@@ -3,7 +3,6 @@ import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFavorite } from '../redux/favoritesSlice';
 
-// 🔹 Import custom star icons
 import starIcon from '../assets/icons/star.png';
 import favoriteIcon from '../assets/icons/favorite.png';
 
@@ -30,7 +29,7 @@ const FavoriteScreen = ({ navigation }) => {
         <Text style={styles.specText}>{item.price}</Text>
       </View>
 
-      {/* 🔹 Toggle Star/Favorite Icon when removed */}
+      
       <TouchableOpacity
         onPress={() => handleRemoveFavorite(item)}
         style={styles.favoriteIcon}
@@ -38,7 +37,7 @@ const FavoriteScreen = ({ navigation }) => {
         <Image 
           source={favoriteIcon} 
           style={styles.icon} 
-          key={`fav-${item.model}`}  // 🔥 Forces re-render
+          key={`fav-${item.model}`}  
         />
       </TouchableOpacity>
     </TouchableOpacity>
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
   icon: {
     width: 28,
     height: 28,
-    tintColor: '#FFD700', // Optional: Change color if needed
+    tintColor: '#FFD700', 
   },
   noFavoritesText: {
     fontSize: 18,

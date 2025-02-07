@@ -8,7 +8,7 @@ import AuthNavigator from './src/navigator/AuthNavigator';
 import StackNavigator from './src/navigator/StackNavigator';
 
 const MainApp = () => {
-  const user = useSelector((state: any) => state.auth.user);  // Get user from Redux
+  const user = useSelector((state: any) => state.auth.user);  
 
   return (
     <NavigationContainer>
@@ -18,7 +18,7 @@ const MainApp = () => {
 };
 
 const App = () => (
-  <Provider store={store}> {/* ✅ Wrap everything inside Provider */}
+  <Provider store={store}> 
     <SafeAreaProvider>
       <MainApp />
     </SafeAreaProvider>

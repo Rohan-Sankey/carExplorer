@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,26 +8,45 @@ import {
   Image,
   FlatList,
   SafeAreaView,
-  ActivityIndicator,
 } from 'react-native';
+import carData from '../data/homeScreenCars'; 
 
 const CarGenreMenu = ({ navigation }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [filteredCars, setFilteredCars] = useState(carData);
+
+  // Debouncing 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchText);
+    }, 300);
+
+    return () => clearTimeout(handler); 
+  }, [searchText]);
+
+ 
+  useEffect(() => {
+    setFilteredCars(
+      carData.filter((car) =>
+        car.model.toLowerCase().includes(debouncedSearch.toLowerCase())
+      )
+    );
+  }, [debouncedSearch]);
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleGenreSelect = (genre) => {
-    // Navigate to CarModelsScreen with the selected genre
     navigation.navigate('CarModels', { genre });
     setIsMenuOpen(false);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Search Bar and Menu */}
+  
       <View style={styles.searchBarContainer}>
         <TextInput
           style={styles.searchBar}
@@ -37,57 +56,46 @@ const CarGenreMenu = ({ navigation }) => {
         />
         <TouchableOpacity style={styles.menuButton} onPress={handleMenuToggle}>
           <Image
-            source={require('../assets/icons/burger-bar.png')} // Local menu icon
+            source={require('../assets/icons/burger-bar.png')}
             style={styles.menuImage}
           />
         </TouchableOpacity>
       </View>
 
-      {/* Genre Menu */}
+    
       {isMenuOpen && (
         <View style={styles.menu}>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => handleGenreSelect('modern')}
-          >
-            <Text style={styles.menuText}>Modern</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => handleGenreSelect('sports')}
-          >
-            <Text style={styles.menuText}>Sports</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => handleGenreSelect('classic')}
-          >
-            <Text style={styles.menuText}>Classic</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => handleGenreSelect('electric')}
-          >
-            <Text style={styles.menuText}>Electric</Text>
-          </TouchableOpacity>
+          {['Modern', 'Sports', 'Classic', 'Electric'].map((genre) => (
+            <TouchableOpacity
+              key={genre}
+              style={styles.menuItem}
+              onPress={() => handleGenreSelect(genre.toLowerCase())}
+            >
+              <Text style={styles.menuText}>{genre}</Text>
+            </TouchableOpacity>
+          ))}
           <TouchableOpacity style={styles.collapseButton} onPress={handleMenuToggle}>
             <Text style={styles.menuText}>Collapse</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Car Grid - Currently static as no data is fetched */}
+      
       <FlatList
-        data={[1, 2, 3]}
+        data={filteredCars}
         renderItem={({ item }) => (
           <View style={styles.carCard}>
-            <Text style={styles.carName}>Car {item}</Text>
+            <Image source={{ uri: item.imageUrl }} style={styles.carImage} />
+            <Text style={styles.carName}>{item.model}</Text>
           </View>
         )}
-        keyExtractor={(item) => item.toString()}
+        keyExtractor={(item, index) => index.toString()}
         numColumns={2}
         columnWrapperStyle={styles.columnWrapper}
         contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          <Text style={styles.noResultsText}>No matching cars found.</Text>
+        }
       />
     </SafeAreaView>
   );
@@ -142,6 +150,7 @@ const styles = StyleSheet.create({
   menuText: { fontSize: 16, color: '#333' },
   listContent: {
     paddingTop: 80,
+    paddingBottom: 20,
     paddingHorizontal: 10,
   },
   columnWrapper: {
@@ -149,18 +158,34 @@ const styles = StyleSheet.create({
   },
   carCard: {
     flex: 1,
-    margin: 5,
+    margin: 8,
     alignItems: 'center',
     backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 12,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  carImage: {
+    width: 120,
+    height: 140,
     borderRadius: 8,
-    padding: 10,
-    elevation: 2,
+    resizeMode: 'cover',
   },
   carName: {
-    marginTop: 10,
-    fontSize: 14,
+    marginTop: 8,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#333',
+  },
+  noResultsText: {
+    fontSize: 16,
+    color: '#888',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
